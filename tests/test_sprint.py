@@ -13,7 +13,7 @@ from tracker.models import Project, Sprint, SprintStatusChoices
 
 @pytest.mark.django_db
 class TestGetSprints:
-    def test_get_sprints(self, admin_client: APIClient, sprint_1: Sprint):  # noqa: F811
+    def test_ok(self, admin_client: APIClient, sprint_1: Sprint):  # noqa: F811
         # Create a sprint for the project
         response = admin_client.get("/api/sprints/")
         assert response.status_code == 200
@@ -21,12 +21,12 @@ class TestGetSprints:
         assert response.data[0]["name"] == sprint_1.name
         assert response.data[0]["status"] == sprint_1.status
 
-    def test_get_sprints_unauthenticated(self):
+    def test_fail_unauthenticated(self):
         client = APIClient()
         response = client.get("/api/sprints/")
         assert response.status_code == 401
 
-    def test_get_sprints_non_admin_user(self, user_client: APIClient):  # noqa: F811
+    def test_fail_non_admin_user(self, user_client: APIClient):  # noqa: F811
         response = user_client.get("/api/sprints/")
         assert response.status_code == 200
 
@@ -39,16 +39,16 @@ class TestGetSprintDetail:
         assert response.data["name"] == sprint_1.name
         assert response.data["status"] == sprint_1.status
 
-    def test_get_nonexistent_sprint(self, admin_client: APIClient):  # noqa: F811
+    def test_fail_nonexistent_sprint(self, admin_client: APIClient):  # noqa: F811
         response = admin_client.get("/api/sprints/999/")
         assert response.status_code == 404
 
-    def test_get_sprint_unauthenticated(self, sprint_1: Sprint):  # noqa: F811
+    def test_fail_sprint_unauthenticated(self, sprint_1: Sprint):  # noqa: F811
         client = APIClient()
         response = client.get(f"/api/sprints/{sprint_1.id}/")
         assert response.status_code == 401
 
-    def test_get_sprint_non_admin_user(
+    def test_fail_sprint_non_admin_user(
         self,
         user_client: APIClient,  # noqa: F811
         sprint_1: Sprint,  # noqa: F811
@@ -59,7 +59,7 @@ class TestGetSprintDetail:
 
 @pytest.mark.django_db
 class TestCreateSprint:
-    def test_create_sprint(self, admin_client: APIClient, project_1: Project):  # noqa: F811
+    def test_ok(self, admin_client: APIClient, project_1: Project):  # noqa: F811
         data = {
             "project": project_1.id,
             "name": "New Sprint",
@@ -72,7 +72,7 @@ class TestCreateSprint:
         assert response.data["status"] == SprintStatusChoices.PLANNED
         assert response.data["project"] == project_1.id
 
-    def test_create_sprint_unauthenticated(self, project_1: Project):  # noqa: F811
+    def test_fail_unauthenticated(self, project_1: Project):  # noqa: F811
         client = APIClient()
         data = {
             "project": project_1.id,
@@ -83,7 +83,7 @@ class TestCreateSprint:
         response = client.post("/api/sprints/", data)
         assert response.status_code == 401
 
-    def test_create_sprint_non_admin_user(
+    def test_fail_non_admin_user(
         self,
         user_client: APIClient,  # noqa: F811
         project_1: Project,  # noqa: F811
@@ -97,7 +97,7 @@ class TestCreateSprint:
         response = user_client.post("/api/sprints/", data)
         assert response.status_code == 403
 
-    def test_create_sprint_invalid_data(
+    def test_fail_invalid_data(
         self,
         admin_client: APIClient,  # noqa: F811
         project_1: Project,  # noqa: F811
@@ -114,7 +114,7 @@ class TestCreateSprint:
 
 @pytest.mark.django_db
 class TestUpdateSprint:
-    def test_update_sprint(self, admin_client: APIClient, sprint_1: Sprint):  # noqa: F811
+    def test_ok(self, admin_client: APIClient, sprint_1: Sprint):  # noqa: F811
         data = {
             "name": "Updated Sprint",
             "start_date": "2023-01-05",
@@ -130,7 +130,7 @@ class TestUpdateSprint:
         assert sprint_1.end_date.strftime("%Y-%m-%d") == data["end_date"]
         assert sprint_1.status == data["status"]
 
-    def test_update_sprint_unauthenticated(self, sprint_1: Sprint):  # noqa: F811
+    def test_fail_unauthenticated(self, sprint_1: Sprint):  # noqa: F811
         client = APIClient()
         data = {
             "name": "Updated Sprint",
@@ -141,7 +141,7 @@ class TestUpdateSprint:
         response = client.patch(f"/api/sprints/{sprint_1.id}/", data)
         assert response.status_code == 401
 
-    def test_update_sprint_non_admin_user(
+    def test_fail_non_admin_user(
         self,
         user_client: APIClient,  # noqa: F811
         sprint_1: Sprint,  # noqa: F811
@@ -155,7 +155,7 @@ class TestUpdateSprint:
         response = user_client.patch(f"/api/sprints/{sprint_1.id}/", data)
         assert response.status_code == 403
 
-    def test_update_sprint_invalid_data(
+    def test_fail_invalid_data(
         self,
         admin_client: APIClient,  # noqa: F811
         sprint_1: Sprint,  # noqa: F811
