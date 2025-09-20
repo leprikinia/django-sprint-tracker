@@ -1,9 +1,9 @@
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
+
 from tracker.models import Project, Sprint, Task
 from tracker.permissions import IsAdminOrReadOnly, IsAssigneeOrAdmin
 from tracker.serializers import ProjectSerializer, SprintSerializer, TaskSerializer
-
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
 
 
 class ProjectViewSet(ModelViewSet):
@@ -19,6 +19,6 @@ class SprintViewSet(ModelViewSet):
 
 
 class TaskViewSet(ModelViewSet):
-    queryset = Task.objects.select_related('sprint', 'assignee').all()
+    queryset = Task.objects.select_related("sprint", "assignee").all()
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated & IsAssigneeOrAdmin]
