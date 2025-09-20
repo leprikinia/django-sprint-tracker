@@ -122,7 +122,6 @@ class TestUpdateSprint:
             "status": SprintStatusChoices.ACTIVE,
         }
         response = admin_client.patch(f"/api/sprints/{sprint_1.id}/", data)
-        print(response.data)
         assert response.status_code == 200
         sprint_1.refresh_from_db()
         assert sprint_1.name == data["name"]

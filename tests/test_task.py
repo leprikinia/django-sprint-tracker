@@ -128,7 +128,6 @@ class TestCreateTask:
             "status": TaskStatusChoices.TO_DO,
         }
         response = user_client.post("/api/tasks/", data)
-        print(response.data)
         assert response.status_code == 201
 
 

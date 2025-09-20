@@ -11,7 +11,6 @@ class IsAdminOrReadOnly(BasePermission):
 class IsAssigneeOrAdmin(BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
-            print(f"Request method is safe {request.method}")
             return True
 
         return request.user.is_authenticated and (
