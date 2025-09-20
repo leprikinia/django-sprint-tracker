@@ -49,10 +49,24 @@ class Sprint(models.Model):
 
 
 class Task(models.Model):
-    project = models.ForeignKey(Project, related_name="tasks", on_delete=models.CASCADE)
-    sprint = models.ForeignKey(Sprint, related_name="tasks", on_delete=models.CASCADE)
+    project = models.ForeignKey(
+        Project,
+        related_name="tasks",
+        on_delete=models.CASCADE,
+    )
+    sprint = models.ForeignKey(
+        Sprint,
+        null=True,
+        blank=True,
+        related_name="tasks",
+        on_delete=models.CASCADE,
+    )
     assignee = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="tasks"
+        User,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="tasks",
     )
 
     title = models.CharField(max_length=256)
