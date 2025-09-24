@@ -54,5 +54,23 @@ services:
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
     profiles: ["dev"]
 
+  api-test:
+    container_name: api-test
+    build:
+      context: .
+      target: dev
+    environment:
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["pytest"]
+    profiles: ["test"]
+
 volumes:
    pgdata:
