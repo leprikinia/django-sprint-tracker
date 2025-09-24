@@ -11,22 +11,21 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-  
-  env:
-    DATABASE_NAME: test_db
-    DATABASE_USERNAME: test_user
-    DATABASE_PASSWORD: test_password
-    DATABASE_HOST: db
-    DATABASE_PORT: 5432
-    DJANGO_SECRET_KEY: test_secret_key
-  
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    env:
+      DATABASE_NAME: test_db
+      DATABASE_USERNAME: test_user
+      DATABASE_PASSWORD: test_password
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DJANGO_SECRET_KEY: test_secret_key
 
-    - name: Build and run tests
-      run: docker compose --profile dev up --build --abort-on-container-exit
-      env:
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and run tests
+        run: docker compose --profile dev up --build --abort-on-container-exit
+        env:
           DATABASE_NAME: ${{ env.DATABASE_NAME }}
           DATABASE_USERNAME: ${{ env.DATABASE_USERNAME }}
           DATABASE_PASSWORD: ${{ env.DATABASE_PASSWORD }}
