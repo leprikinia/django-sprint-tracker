@@ -149,6 +149,26 @@ class TestUpdateTask:
         assert response.data["description"] == data["description"]
         assert response.data["status"] == data["status"]
 
+    def test_ok_user_assignee(
+        self,
+        user_client: APIClient,  # noqa: F811
+        task_1: Task,  # noqa: F811
+        user: User,  # noqa: F811 # type: ignore
+    ):
+        # Assign the task to the user
+        task_1.assignee = user
+        task_1.save()
+        data = {
+            "title": "Updated Task Title by Assignee",
+            "description": "Updated Task Description by Assignee",
+            "status": TaskStatusChoices.IN_PROGRESS,
+        }
+        response = user_client.patch(f"/api/tasks/{task_1.id}/", data)
+        assert response.status_code == 200
+        assert response.data["title"] == data["title"]
+        assert response.data["description"] == data["description"]
+        assert response.data["status"] == data["status"]
+
     def test_fail_unauthenticated(self, task_1: Task):  # noqa: F811
         client = APIClient()
         data = {
@@ -172,26 +192,6 @@ class TestUpdateTask:
         response = user_client.patch(f"/api/tasks/{task_1.id}/", data)
         assert response.status_code == 403
 
-    def test_fail_non_admin_user_assignee(
-        self,
-        user_client: APIClient,  # noqa: F811
-        task_1: Task,  # noqa: F811
-        user: User,  # noqa: F811 # type: ignore
-    ):
-        # Assign the task to the user
-        task_1.assignee = user
-        task_1.save()
-        data = {
-            "title": "Updated Task Title by Assignee",
-            "description": "Updated Task Description by Assignee",
-            "status": TaskStatusChoices.IN_PROGRESS,
-        }
-        response = user_client.patch(f"/api/tasks/{task_1.id}/", data)
-        assert response.status_code == 200
-        assert response.data["title"] == data["title"]
-        assert response.data["description"] == data["description"]
-        assert response.data["status"] == data["status"]
-
     def test_fail_attach_to_completed_sprint(
         self,
         admin_client: APIClient,  # noqa: F811
@@ -212,3 +212,68 @@ class TestUpdateTask:
         response = admin_client.patch(f"/api/tasks/{task_1.id}/", data)
         assert response.status_code == 400
         assert "Cannot add or move tasks to a closed sprint." in str(response.data)
+
+
+@pytest.mark.django_db
+class TestAssignTask:
+    def test_ok(
+        self,
+        admin_client: APIClient,  # noqa: F811
+        task_1: Task,  # noqa: F811,
+        user: User,  # noqa: F811, # type: ignore
+    ):
+        assert task_1.assignee is None
+        data = {"user": user.id}
+        response = admin_client.patch(f"/api/tasks/{task_1.id}/assign/", data)
+
+        assert response.status_code == 200
+
+        task_1.refresh_from_db()
+        assert task_1.assignee == user
+
+    def test_fail_unauthenticated(self, task_1: Task, user: User):  # type: ignore # noqa: F811
+        client = APIClient()
+        data = {"user": user.id}
+        response = client.patch(f"/api/tasks/{task_1.id}/assign/", data)
+        assert response.status_code == 401
+
+    def test_fail_non_admin_user_not_assignee(
+        self,
+        user_client: APIClient,  # noqa: F811
+        task_1: Task,  # noqa: F811
+        user: User,  # type: ignore # noqa: F811
+    ):
+        data = {"user": user.id}
+        response = user_client.patch(f"/api/tasks/{task_1.id}/assign/", data)
+        assert response.status_code == 403
+
+    def test_user_assignee(
+        self,
+        user_client: APIClient,  # noqa: F811
+        task_1: Task,  # noqa: F811
+        user: User,  # noqa: F811 # type: ignore
+    ):
+        data = {"user": user.id}
+        response = user_client.patch(f"/api/tasks/{task_1.id}/assign/", data)
+
+        assert response.status_code == 403
+
+        task_1.assignee = user
+        task_1.save()
+
+        data = {"user": user.id}
+        response = user_client.patch(f"/api/tasks/{task_1.id}/assign/", data)
+
+        assert response.status_code == 200
+
+        task_1.refresh_from_db()
+        assert task_1.assignee == user
+
+    def test_fail_nouser_found(
+        self,
+        user_client: APIClient,  # noqa: F811
+        task_1: Task,  # noqa: F811
+    ):
+        data = {"user": 99999}
+        response = user_client.patch(f"/api/tasks/{task_1.id}/assign/", data)
+        assert response.status_code == 403
