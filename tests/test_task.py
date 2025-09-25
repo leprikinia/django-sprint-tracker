@@ -10,7 +10,7 @@ from tests.fixtures import (  # noqa: F401
     user,
     user_client,
 )
-from tracker.models import Project, Sprint, Task, TaskStatusChoices
+from tracker.models import Project, Sprint, SprintStatusChoices, Task, TaskStatusChoices
 
 
 @pytest.mark.django_db
@@ -191,3 +191,24 @@ class TestUpdateTask:
         assert response.data["title"] == data["title"]
         assert response.data["description"] == data["description"]
         assert response.data["status"] == data["status"]
+
+    def test_fail_attach_to_completed_sprint(
+        self,
+        admin_client: APIClient,  # noqa: F811
+        task_1: Task,  # noqa: F811
+        sprint_1: Sprint,  # noqa: F811
+    ):
+        task_1.sprint = None
+        task_1.save()
+        task_1.refresh_from_db()
+
+        sprint_1.status = SprintStatusChoices.COMPLETED
+        sprint_1.save()
+        sprint_1.refresh_from_db()
+
+        data = {
+            "sprint": sprint_1.id,
+        }
+        response = admin_client.patch(f"/api/tasks/{task_1.id}/", data)
+        assert response.status_code == 400
+        assert "Cannot add or move tasks to a closed sprint." in str(response.data)
