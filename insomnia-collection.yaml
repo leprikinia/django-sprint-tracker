@@ -1,0 +1,553 @@
+type: collection.insomnia.rest/5.0
+name: Scratch Pad
+meta:
+  id: wrk_scratchpad
+  created: 1758235542326
+  modified: 1758235542326
+  description: ""
+collection:
+  - url: http://localhost:8000/token/
+    name: Token
+    meta:
+      id: req_0a4e1befc78446ef9fc2342db1182e86
+      created: 1758235881936
+      modified: 1758841905614
+      isPrivate: false
+      description: ""
+      sortKey: -1758235881936
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "admin",
+        	"password": "12345"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.6.1
+    authentication:
+      type: none
+    scripts:
+      afterResponse: |2+
+        
+          const json = insomnia.response.json();
+
+          if (json && json.access) {
+            insomnia.environment.set("access_token", json.access);
+          }
+
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - name: Project
+    meta:
+      id: fld_84a9eafb469b44e68f7c8a274f4209a6
+      created: 1758235613095
+      modified: 1758235613095
+      sortKey: -1758235613095
+      description: ""
+    children:
+      - url: http://localhost:8000/api/projects/
+        name: list
+        meta:
+          id: req_8df1354f53d4460782d1dddbdda8bcbf
+          created: 1758235628399
+          modified: 1758841959081
+          isPrivate: false
+          description: ""
+          sortKey: -1758235628399
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/projects/34/
+        name: update
+        meta:
+          id: req_36a62a9817b44de794e245884bf2ce02
+          created: 1758237120267
+          modified: 1758842043589
+          isPrivate: false
+          description: ""
+          sortKey: -1758235628349
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"name": "Test Project 2-2"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/projects/
+        name: create
+        meta:
+          id: req_5d75c3368d6f405c937eba1006da1d37
+          created: 1758308504296
+          modified: 1758841996940
+          isPrivate: false
+          description: ""
+          sortKey: -1758235628374
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"name": "Test Project 3",
+            	"description": "Tets project"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/projects/1/
+        name: delete
+        meta:
+          id: req_0e6972f444b74b2fa659ffd1651a14cd
+          created: 1758841058071
+          modified: 1758842070576
+          isPrivate: false
+          description: ""
+          sortKey: -1758235628324
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/projects/1/
+        name: retrieve
+        meta:
+          id: req_6481e3bf4eeb4a06a0bc844cff98951a
+          created: 1758841089809
+          modified: 1758841947347
+          isPrivate: false
+          description: ""
+          sortKey: -1758235628386.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Sprint
+    meta:
+      id: fld_9fa4a10661b24c0fb26aa2ef854f3efc
+      created: 1758235619211
+      modified: 1758235619211
+      sortKey: -1758235619211
+      description: ""
+    children:
+      - url: http://localhost:8000/api/sprints/
+        name: list
+        meta:
+          id: req_5103d79a33c240beaeaafc1d4a10abce
+          created: 1758237535123
+          modified: 1758842085745
+          isPrivate: false
+          description: ""
+          sortKey: -1758237535123
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/sprints/1/
+        name: retrieve
+        meta:
+          id: req_2c92ab0b47d04bd2a4ce0cbf3a8c3d06
+          created: 1758841113320
+          modified: 1758842106002
+          isPrivate: false
+          description: ""
+          sortKey: -1758236708529.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/sprints/
+        name: create
+        meta:
+          id: req_b05de00085644955941ce4336a07722a
+          created: 1758841121529
+          modified: 1758842256645
+          isPrivate: false
+          description: ""
+          sortKey: -1758236295232.75
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"project": 35,
+            	"name": "Sprint 1",
+            	"start_date": "2025-10-06",
+            	"end_date": "2025-10-20"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/sprints/1/
+        name: update
+        meta:
+          id: req_3d1be3af96b84c5fad838db998cd7bb9
+          created: 1758842266913
+          modified: 1758842343770
+          isPrivate: false
+          description: ""
+          sortKey: -1758236088584.375
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"name": "Sprint 1-1"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/sprints/1/
+        name: delete
+        meta:
+          id: req_5c65bc0a6858441891b947d421140206
+          created: 1758842352404
+          modified: 1758842361882
+          isPrivate: false
+          description: ""
+          sortKey: -1758235985260.1875
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Task
+    meta:
+      id: fld_5e2545c180f841fc8770d1abbdc906f2
+      created: 1758235625158
+      modified: 1758235625158
+      sortKey: -1758235625158
+      description: ""
+    children:
+      - url: http://localhost:8000/api/tasks/
+        name: list
+        meta:
+          id: req_4a2630831b3e4fda856f1ff9ce3990df
+          created: 1758237594014
+          modified: 1758842480413
+          isPrivate: false
+          description: ""
+          sortKey: -1758237584789
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/tasks/2/
+        name: retrieve
+        meta:
+          id: req_8abf4c1de3b544198e6af99867b5ce16
+          created: 1758842497489
+          modified: 1758843213148
+          isPrivate: false
+          description: ""
+          sortKey: -1758237559956
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/tasks/
+        name: create
+        meta:
+          id: req_ecd61b033239407ca1c6416482e46bc3
+          created: 1758842507689
+          modified: 1758842600306
+          isPrivate: false
+          description: ""
+          sortKey: -1758237547539.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"project": 35,
+            	"sprint": 2,
+              "title": "New Task",
+              "description": "New Task Description",
+              "status": 0
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/tasks/1/
+        name: update
+        meta:
+          id: req_65ac84c920cc4c6ebfa12357b440a2a1
+          created: 1758842610657
+          modified: 1758842627300
+          isPrivate: false
+          description: ""
+          sortKey: -1758237541331.25
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "title": "New Task - 1"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/tasks/1/
+        name: delete
+        meta:
+          id: req_70b4af32bc574409861c373d60418dd4
+          created: 1758842636360
+          modified: 1758842640826
+          isPrivate: false
+          description: ""
+          sortKey: -1758237538227.125
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/tasks/2/assign/
+        name: assign
+        meta:
+          id: req_5412dc9968d84cb4a1a0eb985033638a
+          created: 1758843165978
+          modified: 1758844032568
+          isPrivate: false
+          description: ""
+          sortKey: -1758237539779.1875
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"user": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1758235551839
+    modified: 1758844052298
+environments:
+  name: Base Environment
+  meta:
+    id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1758235551767
+    modified: 1758844052299
+    isPrivate: false
+  data:
+    access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODQ0MzUyLCJpYXQiOjE3NTg4NDQwNTIsImp0aSI6ImQ1N2ZkMWJlZDZlZTQ0Mzk5ZWYyYmM5ZmExNzNjYmUzIiwidXNlcl9pZCI6IjEifQ.HuYA6FXCJ4mRZkZsiwSmXVZE3IlHkjGx74YZk_nG14o
+    refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1ODkyODE4OSwiaWF0IjoxNzU4ODQxNzg5LCJqdGkiOiJkYjc0Mzc5N2MwM2M0OGNiODZiOTNiNDA4MDE1Y2U5NyIsInVzZXJfaWQiOiIxIn0.hbVV1BLZC31xO_Rx4awXQWglDtGi7FGoo7XhlsT591w
