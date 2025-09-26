@@ -3,12 +3,6 @@ from rest_framework import serializers
 from tracker.models import Project, Sprint, SprintStatusChoices, Task
 
 
-class SprintSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Sprint
-        fields = "__all__"
-
-
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
@@ -21,6 +15,14 @@ class TaskSerializer(serializers.ModelSerializer):
                 "Cannot add or move tasks to a closed sprint."
             )
         return super().validate(attrs)
+
+
+class SprintSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sprint
+        fields = "__all__"
+
+    tasks = TaskSerializer(many=True, read_only=True)
 
 
 class ProjectSerializer(serializers.ModelSerializer):
